@@ -28,13 +28,25 @@
       <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea><br/>
             Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' /><br /><br />
       <p><input type='submit' name="test" id="test" value='Добавить товар' /></p>
+      <p><select id="Goods" name="Goods">
+        <option value="" disabled selected>Выберите номер товара</option>
+        <?php
+          $db = new SQLite3('../resources/data.sqlite');
+          $res = $db->query('SELECT id FROM Services');
+          while ($row = $res->fetchArray()) {
+            echo "<option>{$row['id']}</option>";
+          }
+        ?>
+      </select>
+      для того, чтобы <input type='submit' name="deleteGoods" id="deleteGoods" value='Удалить товар' />
+      или <input type='submit' name="changeGoods" id="changeGoods" value='Изменить' /> его</p>
       <?php
       function addNew()
       {
         if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
         {
           $name = $_FILES['filename']['name'];
-          $type = pathinfo($name, PATHINFO_EXTENSION);;
+          $type = pathinfo($name, PATHINFO_EXTENSION);
 
           $id_base = 0;
           $title = $_POST['nameText'];
@@ -69,12 +81,53 @@
           unset($_FILES['filename']);
         }
       }
+      function deleteGoods()
+      {
+        $selectedId = $_POST['Goods'];
+        $db = new SQLite3('../resources/data.sqlite');
+        $sql = "DELETE FROM Services WHERE id = '$selectedId'";
+        $db -> query($sql);
+      }
+      //
+      function changeGoods()
+      {
+        if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
+        {
+          $name = $_FILES['filename']['name'];
+          $type = pathinfo($name, PATHINFO_EXTENSION);
+          $folder = "../resources/";
+          $template = $_FILES['filename']['tmp_name'];
+          
+          $selectedId = $_POST['Goods'];
+          $title = $_POST['nameText'];
+          $desc = $_POST['descriptionText'];
+
+          $db = new SQLite3('../resources/data.sqlite');
+          $sql = "UPDATE Services SET title = '$title', description = '$desc', nameImg = '$selectedId.$type' WHERE id = '$selectedId'";
+          $db -> query($sql);
+
+          unlink('../resources/$selectedId.$type');
+          move_uploaded_file($template, $folder.$selectedId.".".$type);
+        }
+      }
       if (isset($_POST['test']))
       { 
         addNew();  
         echo('<meta http-equiv="refresh" content="0">');
         exit(); 
         
+      }
+      if (isset($_POST['deleteGoods']))
+      {
+        deleteGoods();
+        echo('<meta http-equiv="refresh" content="0">');
+        exit();
+      }
+      if (isset($_POST['changeGoods']))
+      {
+        changeGoods();
+        echo('<meta http-equiv="refresh" content="0">');
+        exit();
       }
         $db = new SQLite3('../resources/data.sqlite');
         $res = $db->query('SELECT * FROM Services');
@@ -90,6 +143,5 @@
       ?>
     </form>
   </div>
-
 </body>
 </html>
