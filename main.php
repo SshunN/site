@@ -10,19 +10,18 @@
   <body>
     <?php include 'mainHeader.html'; ?>
       <div>
-          <div class="container">
-              <div class="row">
-                  <div class="col-md-12"></div>
-              </div>
-              <div class="row">
-                  <div class="col-md-4">
-                    <a class="row" href="#">Товары</a>
-                    <a class="row" href="#">Услуги</a>
-                  </div>
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4"></div>
-              </div>
-          </div>
+        <?php
+        $fp = fopen("resources/mainPage.txt", "r");
+        if ($fp)
+        {
+          while (!feof($fp))
+          {
+            $mytext = fgets($fp, 999);
+            echo "<h5>$mytext</h5>";
+          }
+        }
+        fclose($fp);
+        ?>
       </div>
   </body>
 </html>

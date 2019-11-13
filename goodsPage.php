@@ -10,22 +10,33 @@
   <body>
     <?php include 'mainHeader.html';?>
       <div class="projects-clean">
-    <div class="container">
-        <div class="intro">
+        <div class="container">
+          <div class="intro">
             <h2 class="text-center">Товары</h2>
             <p class="text-center">У нас вы можете приобрести следующие товары</p>
-        </div>
-        <div class="row projects">
+          </div>
+          <div class="row projects">
             <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" src="resources/goods/Conditioning.jpg" />
-                <h3 class="nav-item"><a class="nav-link" href="ConditioningPage.php">Кондиционеры</a></h3>
-                <p>В наличии имеются полупромышленные и промышленные кондиционеры, а так же бытовые спит-системы</p>
+              <h3 class="nav-item"><a class="nav-link" href="ConditioningPage.php">Кондиционеры</a></h3>
+              <?php
+              $cond = fopen("resources/goods/cond/main.txt", "r");
+              if ($cond)
+              {
+                while (!feof($cond))
+                {
+                  $mytext = fgets($cond, 999);
+                  echo "<p>$mytext</p>";
+                }
+              }
+              fclose($cond);
+              ?>
             </div>
             <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" src="resources/goods/Ventilation.jpg" />
                 <h3 class="nav-item"><a class="nav-link" href="">Вентиляция</a></h3>
                 <p>Вентиляция промышленных и жилых помещений</p>
             </div>
+          </div>
         </div>
-    </div>
-</div>
-  </body>
+      </div>
+    </body>
 </html>
