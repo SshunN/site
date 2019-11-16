@@ -88,26 +88,88 @@
         $sql = "DELETE FROM Services WHERE id = '$selectedId'";
         $db -> query($sql);
       }
-      //
       function changeGoods()
       {
-        if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
-        {
-          $name = $_FILES['filename']['name'];
-          $type = pathinfo($name, PATHINFO_EXTENSION);
-          $folder = "../resources/";
-          $template = $_FILES['filename']['tmp_name'];
+        $name = $_FILES['filename']['name'];
+        $type = pathinfo($name, PATHINFO_EXTENSION);
+        $folder = "../resources/";
+        $template = $_FILES['filename']['tmp_name'];
           
-          $selectedId = $_POST['Goods'];
-          $title = $_POST['nameText'];
-          $desc = $_POST['descriptionText'];
+        $selectedId = $_POST['Goods'];
+        $title = $_POST['nameText'];
+        $desc = $_POST['descriptionText'];
+        $oldImg = [];
 
-          $db = new SQLite3('../resources/data.sqlite');
-          $sql = "UPDATE Services SET title = '$title', description = '$desc', nameImg = '$selectedId.$type' WHERE id = '$selectedId'";
-          $db -> query($sql);
+        $db = new SQLite3('../resources/data.sqlite');
+        $sql = "SELECT * FROM Services WHERE id = '$selectedId'";
+        $res = $db -> query($sql);
+        while ($row = $res->fetchArray()) {
+          array_push($oldImg, $row['nameImg']);
+        }
+        $strImg = $oldImg[0];
 
-          unlink('../resources/$selectedId.$type');
-          move_uploaded_file($template, $folder.$selectedId.".".$type);
+        if ($selectedId!= null)
+        {
+          if (($title!= 'Наименование' || $desc!= 'Описание') && $_FILES && $_FILES['filename']['error']!= UPLOAD_ERR_OK)
+          {
+            if ($title == 'Наименование')
+              {
+                $db = new SQLite3('../resources/data.sqlite');
+                $sql = "UPDATE Services SET description = '$desc' WHERE id = '$selectedId'";
+                $db -> query($sql);
+              }
+            if ($desc == 'Описание')
+              {
+                $db = new SQLite3('../resources/data.sqlite');
+                $sql = "UPDATE Services SET title = '$title' WHERE id = '$selectedId'";
+                $db -> query($sql);
+              }
+            if ($title != 'Наименование' && $desc != 'Описание')
+              {
+                $db = new SQLite3('../resources/data.sqlite');
+                $sql = "UPDATE Services SET title = '$title', description = '$desc' WHERE id = '$selectedId'";
+                $db -> query($sql);
+              }
+          }
+          if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
+          {
+            if ($title == 'Наименование' && $desc != 'Описание')
+            {
+              $db = new SQLite3('../resources/data.sqlite');
+              $sql = "UPDATE Services SET description = '$desc', nameImg = '$selectedId' WHERE id = '$selectedId'";
+              $db -> query($sql);
+
+              unlink('../resources/$selectedId');
+              move_uploaded_file($template, $folder.$selectedId);
+            }
+            if ($desc == 'Описание' && $title != 'Наименование')
+            {
+              $db = new SQLite3('../resources/data.sqlite');
+              $sql = "UPDATE Services SET title = '$title', nameImg = '$selectedId' WHERE id = '$selectedId'";
+              $db -> query($sql);
+
+              unlink('../resources/$selectedId');
+              move_uploaded_file($template, $folder.$selectedId);
+            }
+            if ($title != 'Наименование' && $desc != 'Описание')
+            {
+              $db = new SQLite3('../resources/data.sqlite');
+              $sql = "UPDATE Services SET title = '$title', description = '$desc', nameImg = '$selectedId' WHERE id = '$selectedId'";
+              $db -> query($sql);
+
+              unlink('../resources/$selectedId');
+              move_uploaded_file($template, $folder.$selectedId);
+            }
+            if ($title == 'Наименование' && $desc == 'Описание')
+            {
+              $db = new SQLite3('../resources/data.sqlite');
+              $sql = "UPDATE Services SET nameImg = '$selectedId' WHERE id = '$selectedId'";
+              $db -> query($sql);
+
+              unlink("../resources/$selectedId");
+              move_uploaded_file($template, $folder.$selectedId);
+            }
+          }
         }
       }
       if (isset($_POST['test']))
