@@ -43,14 +43,14 @@
       <?php
       function addNew()
       {
-        if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
+        $title = $_POST['nameText'];
+        $desc = $_POST['descriptionText'];
+        if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK && $title!= 'Наименование' && $desc!= 'Описание')
         {
           $name = $_FILES['filename']['name'];
           $type = pathinfo($name, PATHINFO_EXTENSION);
 
           $id_base = 0;
-          $title = $_POST['nameText'];
-          $desc = $_POST['descriptionText'];
           $folder = "../resources/";
           $template = $_FILES['filename']['tmp_name'];
 
@@ -64,18 +64,13 @@
           }
           $id_img = $id_base + 1;
 
-          move_uploaded_file($template, $folder.$id_img.".".$type);
+          move_uploaded_file($template, $folder.$id_img);
 
           if($type == "jpg" | $type == "jpeg" | $type == "png")
           {
             $db = new SQLite3('../resources/data.sqlite');
-            $sql = "INSERT INTO Services (title, description, nameImg) VALUES ('$title', '$desc', '$id_img.$type')";
+            $sql = "INSERT INTO Services (title, description, nameImg) VALUES ('$title', '$desc', '$id_img')";
             $db -> query($sql);
-
-                    // move_uploaded_file($_FILES['filename']['tmp_name'], "resources/$name");
-                    // echo "Файл загружен";
-                    // $name = null;
-                    // $type = null;
           }
           else echo "Файл не был загружен";
           unset($_FILES['filename']);
