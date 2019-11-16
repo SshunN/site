@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Изменение товапа</title>
+  <title>Изменение товара</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style/bootstrap.min.css"/>
   <link rel="stylesheet" href="style/navigation.css">
@@ -13,25 +13,42 @@
 <body>
   <div class="container">
     <script>
-      function clickArea(id, startText){
-        var area = document.getElementById(id);
-        if(area.innerHTML == startText) area.innerHTML = '';
-      }
-      function liveArea(id, text){
-        var area = document.getElementById(id);
-        if(area.innerHTML == '') area.innerHTML = text;
-      }
       function check(){
         var file = document.querySelector("#fUpload");
         if ( /\.(jpe?g|png)$/i.test(file.files[0].name) === false ) { alert("Выберите корректный файл!"); }
       }
     </script>
     <form method="post" enctype='multipart/form-data'>
-      <p>Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' />
-      <textarea id="nameText" name="nameText" onclick="clickArea('nameText', 'Наименование')" onblur="liveArea('nameText', 'Наименование')">Наименование</textarea>
-      <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea>
-      <input type='submit' name="addButton" id="addButton" value='Добавить товар' /></p>
+      <?php
+      $id = $_SESSION['id'];
+      $table = $_SESSION['table'];
+      $folder = $_SESSION['folder'];
+      $oldImg = [];
+      $titleAr = [];
+      $descAr = [];
 
+      $db = new SQLite3('../resources/data.sqlite');
+      $sql = "SELECT * FROM $table WHERE id = '$id'";
+      $res = $db -> query($sql);
+      while ($row = $res->fetchArray()) {
+        array_push($oldImg, $row['nameImg']);
+        array_push($titleAr, $row['title']);
+        array_push($descAr, $row['description']);
+      }
+      $strImg = $oldImg[0];
+      $title1 = $titleAr[0];
+      $desc1 = $descAr[0];
+      ?>
+      <p>Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' />
+      <textarea id="nameText" name="nameText" ><?php echo htmlspecialchars($title1) ?></textarea>
+      <textarea id="descriptionText" name="descriptionText" ><?php echo htmlspecialchars($desc1) ?></textarea>
+      <input type='submit' name="changeGoods" id="changeGoods" value='Изменить' /></p>
+      <p>Текущее изображение:</p>
+      <p>
+      <?php
+        echo "<img src='$folder$id' width='350' height='200'>";
+      ?>
+      </p>
       <?php
       function changeGoods($id, $table, $folder)
       {
@@ -41,80 +58,31 @@
           
         $title = $_POST['nameText'];
         $desc = $_POST['descriptionText'];
-        $oldImg = [];
-
-        $db = new SQLite3('../resources/data.sqlite');
-        $sql = "SELECT * FROM $table WHERE id = '$id'";
-        $res = $db -> query($sql);
-        while ($row = $res->fetchArray()) {
-          array_push($oldImg, $row['nameImg']);
-        }
-        $strImg = $oldImg[0];
 
         if ($id!= null)
         {
-          if (($title!= 'Наименование' || $desc!= 'Описание') && $_FILES && $_FILES['filename']['error']!= UPLOAD_ERR_OK)
+          if ($_FILES && $_FILES['filename']['error']!= UPLOAD_ERR_OK)
           {
-            if ($title == 'Наименование')
-              {
-                $db = new SQLite3('../resources/data.sqlite');
-                $sql = "UPDATE $table SET description = '$desc' WHERE id = '$id'";
-                $db -> query($sql);
-              }
-            if ($desc == 'Описание')
-              {
-                $db = new SQLite3('../resources/data.sqlite');
-                $sql = "UPDATE $table SET title = '$title' WHERE id = '$id'";
-                $db -> query($sql);
-              }
-            if ($title != 'Наименование' && $desc != 'Описание')
-              {
-                $db = new SQLite3('../resources/data.sqlite');
-                $sql = "UPDATE $table SET title = '$title', description = '$desc' WHERE id = '$id'";
-                $db -> query($sql);
-              }
+            $db = new SQLite3('../resources/data.sqlite');
+            $sql = "UPDATE $table SET title = '$title', description = '$desc' WHERE id = '$id'";
+            $db -> query($sql);
           }
           if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
           {
-            if ($title == 'Наименование' && $desc != 'Описание')
-            {
-              $db = new SQLite3('../resources/data.sqlite');
-              $sql = "UPDATE $table SET description = '$desc', nameImg = '$id' WHERE id = '$id'";
-              $db -> query($sql);
+            $db = new SQLite3('../resources/data.sqlite');
+            $sql = "UPDATE $table SET title = '$title', description = '$desc', nameImg = '$id' WHERE id = '$id'";
+            $db -> query($sql);
 
-              move_uploaded_file($template, $folder.$id);
-            }
-            if ($desc == 'Описание' && $title != 'Наименование')
-            {
-              $db = new SQLite3('../resources/data.sqlite');
-              $sql = "UPDATE $table SET title = '$title', nameImg = '$id' WHERE id = '$id'";
-              $db -> query($sql);
+            echo "$folder.$id";
 
-              move_uploaded_file($template, $folder.$id);
-            }
-            if ($title != 'Наименование' && $desc != 'Описание')
-            {
-              $db = new SQLite3('../resources/data.sqlite');
-              $sql = "UPDATE $table SET title = '$title', description = '$desc', nameImg = '$id' WHERE id = '$id'";
-              $db -> query($sql);
-;
-              move_uploaded_file($template, $folder.$id);
-            }
-            if ($title == 'Наименование' && $desc == 'Описание')
-            {
-              $db = new SQLite3('../resources/data.sqlite');
-              $sql = "UPDATE $table SET nameImg = '$id' WHERE id = '$id'";
-              $db -> query($sql);
-
-              move_uploaded_file($template, $folder.$id);
-            }
+            move_uploaded_file($template, $folder.$id);
           }
         }
       }
       if (isset($_POST['changeGoods']))
       {
-		    $id = $_SESSION['id'];
-		    $table = $_SESSION['table'];
+        $id = $_SESSION['id'];
+        $table = $_SESSION['table'];
         $folder = $_SESSION['folder'];
         $backPath = $_SESSION['backPath'];
 		    changeGoods($id, $table, $folder);
