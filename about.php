@@ -9,5 +9,19 @@
   </head>
   <body>
     <?php include 'mainHeader.html';?>
+    <div>
+      <?php
+      $fp = fopen("resources/mainPage.txt", "r");
+      if ($fp)
+      {
+        while (!feof($fp))
+        {
+          $mytext = fgets($fp, 999);
+          echo "<h5>$mytext</h5>";
+        }
+      }
+      fclose($fp);
+      ?>
+    </div>
   </body>
 </html>
