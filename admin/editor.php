@@ -27,10 +27,10 @@
       }
     </script>
     <form method="post" enctype='multipart/form-data'>
-      <textarea id="nameText" name="nameText" onclick="clickArea('nameText', 'Наименование')" onblur="liveArea('nameText', 'Наименование')">Наименование</textarea><br/>
-      <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea><br/>
-            Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' /><br /><br />
-      <p><input type='submit' name="changeGoods" id="changeGoods" value='Изменить' /></p>
+      <p>Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' />
+      <textarea id="nameText" name="nameText" onclick="clickArea('nameText', 'Наименование')" onblur="liveArea('nameText', 'Наименование')">Наименование</textarea>
+      <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea>
+      <input type='submit' name="addButton" id="addButton" value='Добавить товар' /></p>
 
       <?php
       function changeGoods($id, $table, $folder)

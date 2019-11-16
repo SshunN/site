@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="style/navigation.css">
   </head>
   <body>
-    <?php include 'editGoods.php'; ?>
+    <?php include 'editHeader.html'; ?>
+    <div>
+      Редактирование новостей
+    </div>
   </body>
 </html>

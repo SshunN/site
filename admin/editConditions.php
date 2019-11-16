@@ -27,13 +27,14 @@
       }
     </script>
     <form method="post" enctype='multipart/form-data'>
-      <textarea id="nameText" name="nameText" onclick="clickArea('nameText', 'Наименование')" onblur="liveArea('nameText', 'Наименование')">Наименование</textarea><br/>
-      <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea><br/>
-            Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' /><br /><br />
-      <p><input type='submit' name="addButton" id="addButton" value='Добавить товар' /></p>
+      <p>Выберите файл: <input id="fUpload" type='file' onchange="check()" name="filename" size='10' />
+      <textarea id="nameText" name="nameText" onclick="clickArea('nameText', 'Наименование')" onblur="liveArea('nameText', 'Наименование')">Наименование</textarea>
+      <textarea id="descriptionText" name="descriptionText" onclick="clickArea('descriptionText', 'Описание')" onblur="liveArea('descriptionText', 'Описание')">Описание</textarea>
+      <input type='submit' name="addButton" id="addButton" value='Добавить товар' /></p>
 
       <?php
-      function addNew()
+      $folder = "../resources/goods/cond/";
+      function addNew($folder)
       {
         $title = $_POST['nameText'];
         $desc = $_POST['descriptionText'];
@@ -41,9 +42,7 @@
         {
           $name = $_FILES['filename']['name'];
           $type = pathinfo($name, PATHINFO_EXTENSION);
-
           $id_base = 0;
-          $folder = "../resources/";
           $template = $_FILES['filename']['tmp_name'];
 
           $db = new SQLite3('../resources/data.sqlite');
@@ -56,13 +55,12 @@
           }
           $id_img = $id_base + 1;
 
-          move_uploaded_file($template, $folder.$id_img);
-
           if($type == "jpg" | $type == "jpeg" | $type == "png")
           {
             $db = new SQLite3('../resources/data.sqlite');
             $sql = "INSERT INTO Services (title, description, nameImg) VALUES ('$title', '$desc', '$id_img')";
             $db -> query($sql);
+            move_uploaded_file($template, $folder.$id_img);
           }
           else echo "Файл не был загружен";
           unset($_FILES['filename']);
@@ -76,7 +74,7 @@
       }
       if (isset($_POST['addButton']))
       { 
-        addNew();  
+        addNew($folder);  
         echo('<meta http-equiv="refresh" content="0">');
         exit(); 
         
@@ -92,7 +90,7 @@
       {
         $_SESSION['id'] = key($_POST['changeGoods']);
         $_SESSION['table'] = "Services";
-        $_SESSION['folder'] = "../resources/";
+        $_SESSION['folder'] = $folder;
         $_SESSION['backPath'] = "../admin/editConditions.php";
         echo '<script>document.location.href="../admin/editor.php"</script>';
         exit();
@@ -106,7 +104,7 @@
           $id = $row['id'];
           echo "<table>";
           echo "<tr>";
-          echo "<td width='400'><img src='../resources/$i' width='350' height='200'></td>";
+          echo "<td width='400'><img src='$folder$i' width='350' height='200'></td>";
           echo "<td width='150'><h5>{$row['title']}</h5></td>";
           echo "<td width='150'><h5>{$row['description']}</h5></td>";
           echo "<td width='300'>
