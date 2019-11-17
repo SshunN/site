@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style/navigation.css">
   </head>
   <body>
-    <?php include 'mainHeader.html'; ?>
+    <?php include 'mainHeader.php'; ?>
 <table>
   <tbody>
     <?php
@@ -18,16 +18,15 @@
         echo "<tr>";
         $i = $row['nameImg'];
         $id = $row['id'];
+        $title = $row['title'];
         echo "<td width='400'><img src='resources/goods/cond/$i' width='350' height='200'></td>";
-        echo "<td width='150'><h5>{$row['title']}</h5></td>";
+        echo "<td width='150'><h5>{$title}</h5></td>";
         echo "<td width='150'><h5>{$row['description']}</h5></td>";
 
         echo "<td width='300'>
-        <form method='post' action=''>
-        <input type='hidden' name='id' value=$id>
-        <input name='val' type='number' id='$id' onchange='checkValue(id)' min='0' max='20'>
-        <input type='submit' value='Добавить в корзину'></button>
-        </form>
+        <input type='hidden' id='$id' value=$id>
+        <input type='number' id='count$id' onchange='checkValue(id)' min='1' max='20' value = '1'>
+        <button id='but$id' onclick='addToCart($id, `$title`)'>Добавить в корзину</button>
         </td>";
         echo "</tr>";
       }
@@ -36,10 +35,10 @@
   </table>
   </body>
 </html>
-
 <script>
 function checkValue(id){
   el = document.getElementById(id);
-  if(el.value > '20') el.value = '20';
+  if(el.value > 20) el.value = 20;
+  if(el.value < 1) el.value = 1;
 }
 </script>

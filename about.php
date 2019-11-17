@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style/navigation.css">
   </head>
   <body>
-    <?php include 'mainHeader.html';?>
+    <?php include 'mainHeader.php';?>
     <div>
       <?php
       $fp = fopen("resources/mainPage.txt", "r");

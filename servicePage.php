@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style/navigation.css">
   </head>
   <body>
-    <?php include 'mainHeader.html';?>
+    <?php include 'mainHeader.php';?>
     <div>
         <div class="container" id="Cont0">
             <div class="row">
