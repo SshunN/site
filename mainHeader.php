@@ -38,7 +38,7 @@
                     <li class="nav-item" role="presentation"><a class="nav-link" href="goodsPage.php">Товары</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="servicePage.php">Услуги</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="about.php">О нас</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="partners.html">Партнёры</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="partners.php">Партнёры</a></li>
                     <li class='nav-item' role='presentation'><a id="cE" class='nav-link' onclick="openCart()" href=""></a></li>
                 </ul>
             </div>

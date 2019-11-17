@@ -24,7 +24,7 @@
         $s = $a['name'];
         echo "<td>$s</td>";
         $s = $a['count'];
-        echo "<td><input type='number' value='$s' min='0' max='20'/></td>";
+        echo "<td><input type='number' id='count$id' onchange='changeCount($id)' value='$s' min='0' max='20'/></td>";
         echo "<td><button onclick='removeGood($id)'>Удалить</button></td>";
         echo "</tr>";
       }
@@ -37,6 +37,12 @@
     a();
      ?>
      <script>
+     function changeCount(id){
+       cart[id].count=document.getElementById("count" + id).value;
+       s = JSON.stringify(cart);
+       document.cookie = "cart=" + s;
+       localStorage.setItem('cart', s);
+     }
      function checkTelephone(){
        var tel = document.getElementById("telArea");
        if(isNaN(tel.value.slice(-1))) tel.value=tel.value.substring(0, tel.value.length - 1);
