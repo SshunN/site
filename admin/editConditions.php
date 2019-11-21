@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style/navigation.css">
 </head>
 <body>
+  <?php include 'editHeader.html'; ?>
   <div class="container">
     <script>
       function clickArea(id, startText){
