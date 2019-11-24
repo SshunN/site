@@ -9,6 +9,7 @@
   </head>
   <body>
     <?php include 'mainHeader.php';?>
+    <script>changePage("serviceH");</script>
     <div>
         <div class="container" id="Cont0">
             <div class="row">

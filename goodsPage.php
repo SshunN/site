@@ -9,6 +9,7 @@
   </head>
   <body>
     <?php include 'mainHeader.php';?>
+    <script>changePage("goodH");</script>
       <div class="projects-clean">
         <div class="container">
           <div class="intro">

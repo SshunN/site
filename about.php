@@ -9,6 +9,7 @@
   </head>
   <body>
     <?php include 'mainHeader.php';?>
+    <script>changePage("aboutH");</script>
     <div>
       <?php
       $fp = fopen("resources/mainPage.txt", "r");

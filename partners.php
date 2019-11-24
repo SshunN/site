@@ -9,6 +9,7 @@
   </head>
   <body>
     <?php include 'mainHeader.php';?>
+    <script>changePage("partsH");</script>
     <div>
     </div>
   </body>

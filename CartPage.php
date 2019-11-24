@@ -37,6 +37,7 @@
     a();
      ?>
      <script>
+     changePage("cartH");
      function changeCount(id){
        cart[id].count=document.getElementById("count" + id).value;
        s = JSON.stringify(cart);
@@ -93,6 +94,7 @@
          localStorage.clear();
          cart = {};
          document.cookie = "cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+         alert("Заказ успешно отправлен! С вами свяжутся в ближайшее время!");
          window.location.href = "goodsPage.php";
        }
        else alert("Укажите телефон или почту!");
