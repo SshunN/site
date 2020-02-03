@@ -24,35 +24,19 @@
                   <h2 class="text-center">Услуги</h2>
                   <p class="text-center">Мы предоставляем ряд услуг, представленные на данной странице.</p>
               </div>
-              <div class="row projects">
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="resources/air.png" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Установка кондиционеров</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="resources/video.jpg" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Установка систем видеонаблюдений</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="resources/gaz.jpg" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Прочие услуги</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+              <?php
+                $db = new SQLite3('resources/data.sqlite');
+                $res = $db->query("SELECT * FROM Services");
+                echo "<div class='row projects'><div class='col-sm-6 item'>";
+                while ($row = $res->fetchArray()) {
+                    $name = $row['title'];
+                    $desc = $row['description'];
+                    echo "<div class='row'><div class='col'>";
+                    echo "<h3 class='name'>$name</h3>";
+                    echo "<p class='description'>$desc</p></div></div>";
+                }
+                echo "</div></div>"
+              ?>
           </div>
       </div>
   </body>

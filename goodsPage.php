@@ -6,43 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/bootstrap.min.css"/>
     <link rel="stylesheet" href="style/navigation.css">
+    <style>
+    .projects-clean .projects { padding-bottom:40px; }
+    .row {display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:10px;}
+    @media (min-width:100px) {.col-sm-6 { -ms-flex:0 0 50%; flex:0 0 50%; max-width:30%; }}
+    @media (min-width:100px) {.col-lg-4 { -ms-flex:0 0 30%; flex:0 0 30%; max-width:30%; }}
+    .projects-clean .item { text-align: center; padding-top: 50px; min-height: 100px; }
+    .img-fluid { max-width:100%; height:auto;}
+    </style>
   </head>
   <body>
-    <?php include 'mainHeader.php';?>
+   <?php 
+      include 'mainHeader.php';
+      $db = new SQLite3('resources/data.sqlite');
+      $res = $db->query('SELECT * FROM GoodsCategory');
+      echo "<div class='row projects'>";
+      while ($row = $res->fetchArray()) {
+        $image = $row['nameImg'];
+        $title = $row['title'];
+        $id = $row['id'];
+        $desc = $row['description'];
+
+        echo "<div class='col-sm-6 col-lg-4 item'>";
+        if($image != '') echo "<img class='img-fluid' src='resources/goods/cond/$image'/>";
+        echo "<p style='text-align:center;' ><a href='PageGenerator.php?category=$id'>$title</a></p>";
+        echo "<p style='text-align:center;' >$desc</p>";
+        echo "</div>";
+      }
+      echo "</div>";
+    ?>
+    </tr>
     <script>changePage("goodH");</script>
-      <div class="projects-clean">
-        <div class="container">
-          <div class="intro">
-            <h2 class="text-center">Товары</h2>
-            <p class="text-center">У нас вы можете приобрести следующие товары</p>
-          </div>
-          <div class="row projects">
-            <div class="col-sm-6 col-lg-4 item">
-              <img class="img-fluid" style="width:400px;height:200px;" src="resources/goods/Conditioning.jpg" />
-              <h3 class="nav-item"><a class="nav-link" href="ConditioningPage.php">Кондиционеры</a></h3>
-              <?php echo rFile('resources/goods/cond/main.txt');?>
-            </div>
-            <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" style="width:400px;height:200px;" src="resources/goods/Ventilation.jpg" />
-                <h3 class="nav-item"><a class="nav-link" href="">Вентиляция</a></h3>
-                <?php echo rFile('resources/goods/vent/main.txt');?>
-            </div>
-            <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" style="width:400px;height:200px;" src="resources/goods/Heating.jpg" />
-                <h3 class="nav-item"><a class="nav-link" href="">Отопление</a></h3>
-                <?php echo rFile('resources/goods/heating/main.txt');?>
-            </div>
-          </div>
-        </div>
-      </div>
     </body>
 </html>
 
-<?php
-function rFile($dir)
-{
-  $string = "";
-  $fp = fopen($dir, "r");
-  if ($fp) { while (!feof($fp)) { $string = fgets($fp, 999); } }
-  fclose($fp);
-  return "<p>$string</p>";
-}
-?>

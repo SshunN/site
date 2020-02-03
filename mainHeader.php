@@ -32,12 +32,12 @@
     var a = document.getElementById("cartH");
     a.innerText = "Корзина (" + res + " товара)";
   }
-  function addToCart(id, name){
+  function addToCart(id, name, catID){
    var count = document.getElementById("count"+id);
    if(cart[id]==undefined) cart[id] = new good(id, name, 0);
    for(i=0;i<count.value;i++)cart[id].plusCount();
    localStorage.setItem('cart', JSON.stringify(cart));
-   window.location.href = "ConditioningPage.php";
+   window.location.href = "PageGenerator.php?category=" + catID;
   }
   </script>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
