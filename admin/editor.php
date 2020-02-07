@@ -46,7 +46,7 @@
       <p>Текущее изображение:</p>
       <p>
       <?php
-        echo "<img src='$folder$id' width='350' height='200'>";
+        echo "<img src='$folder$strImg' width='350' height='200'>";
       ?>
       </p>
       <?php
@@ -59,25 +59,22 @@
         $title = $_POST['nameText'];
         $desc = $_POST['descriptionText'];
 
-        if ($id!= null)
-        {
           if ($_FILES && $_FILES['filename']['error']!= UPLOAD_ERR_OK)
           {
             $db = new SQLite3('../resources/data.sqlite');
-            $sql = "UPDATE $table SET title = '$title', description = '$desc' WHERE id = '$id'";
+            $sql = "UPDATE '$table' SET title = '$title', description = '$desc' WHERE id = '$id'";
             $db -> query($sql);
           }
           if ($_FILES && $_FILES['filename']['error']== UPLOAD_ERR_OK)
           {
             $db = new SQLite3('../resources/data.sqlite');
-            $sql = "UPDATE $table SET title = '$title', description = '$desc', nameImg = '$id' WHERE id = '$id'";
+            $sql = "UPDATE '$table' SET title = '$title', description = '$desc', nameImg = '$id' WHERE id = '$id'";
             $db -> query($sql);
 
             echo "$folder.$id";
 
             move_uploaded_file($template, $folder.$id);
           }
-        }
       }
       if (isset($_POST['changeGoods']))
       {
