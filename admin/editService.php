@@ -10,62 +10,79 @@
   <body>
     <?php include 'editHeader.html'; ?>
     <script>
-    var oldText;
-    function areaClick(area, type)
-    {
-      switch (type) {
-        case 'description':
-          oldText = area.value;
-          break;
-        default: break;
+      function check(){
+        var file = document.querySelector("#fUpload");
+        if ( /\.(jpe?g|png)$/i.test(file.files[0].name) === false ) { alert("Выберите корректный файл!"); }
       }
-    }
-    function leaveArea(area)
-    {
-      if(area.value != oldText)
-      {
-        alert("change");
-        //сохранение
-      }
-    }
     </script>
+    <div>
+      <form method='post' enctype='multipart/form-data'>
+      <?php
+        require 'funcToChange.php';
 
-    <div class="projects-clean">
-      <div class="container">
-        <div class="intro">
-          <h2 class="text-center">Категории сервисов</h2>
-          <p class="text-center">Выберите изменяемую категорию</p>
-        </div>
-              <div class="row projects">
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="../resources/air.png" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Установка кондиционеров</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="../resources/video.jpg" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Установка систем видеонаблюдений</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-sm-6 item">
-                      <div class="row">
-                          <div class="col-md-12 col-lg-5"><img class="img-fluid" src="../resources/gaz.jpg" /></a></div>
-                          <div class="col">
-                              <h3 class="name">Прочие услуги</h3>
-                              <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida.</p>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-      </div>
+        $db = new SQLite3('../resources/data.sqlite');
+        $res = $db->query('SELECT * FROM Services');
+        echo "<p>Категории услуг</p>";
+        echo "<div>";
+        echo "<table>";
+        echo "<tr><p>Добавить категорию</p></tr>";
+        echo "<tr>";
+        echo "<td width='400'><p>Выберите файл:</p><input id='fUpload1' type='file' onchange='check()' name='filename1' size='10' /></td>";
+        echo "<td width='150'><textarea id='nameText1' name='nameText1' placeholder='Наименование'></textarea></td>";
+        echo "<td width='150'><textarea id='descriptionText1' name='descriptionText1' placeholder='Описание'></textarea></td>";
+        echo "<td width='300'><input type='submit' name='addButton1' id='addButton1' value='Добавить услугу'></button></td>";
+        echo "</tr>";
+        while ($row = $res->fetchArray()) {
+          $image1 = $row['nameImg'];
+          $title1 = $row['title'];
+          $id1 = $row['id'];
+          $desc1 = $row['description'];
+          $folder1 = "../resources/services/";
+
+          echo "<tr>";
+          echo "<td width='400'><img src='$folder1$image1' width='350' height='200'></td>";
+          echo "<td width='150'><h5>{$title1}</h5></td>";
+          echo "<td width='150'><h5>{$desc1}</h5></td>";
+          echo "<td width='300'>
+          <input type='submit' name='changeGoods1[$id1]' value='Изменить'></button>
+          <input type='submit' name='deleteGoods1[$id1]' value='Удалить'></button>
+          </td>";
+          echo "</tr>";
+        }
+        echo "</table>";
+        echo "</div>";
+
+        if (isset($_POST['addButton1']))
+        { 
+          $file = "filename1";
+          $nameText = "nameText1";
+          $descriptionText = "descriptionText1";
+          $table = "Services";
+          $folder = "../resources/services/";
+          addNew($folder, $file, $nameText, $descriptionText, $table);  
+
+          echo('<meta http-equiv="refresh" content="0">');
+          exit(); 
+        }
+        if (isset($_POST['deleteGoods1']))
+        {
+          $table = "Services";
+          $id = key($_POST['deleteGoods1']);
+          deleteGoods($id, $table);
+          echo('<meta http-equiv="refresh" content="0">');
+          exit();
+        }
+        if (isset($_POST['changeGoods1']))
+        {
+          $_SESSION['id'] = key($_POST['changeGoods1']);
+          $_SESSION['table'] = "Services";
+          $_SESSION['folder'] = $folder1;
+          $_SESSION['backPath'] = "../admin/editService.php";
+          echo '<script>document.location.href="../admin/editor.php"</script>';
+          exit();
+        }
+      ?>
     </div>
+  </form>
   </body>
 </html>

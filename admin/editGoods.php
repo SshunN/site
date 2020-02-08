@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="ru" dir="ltr">
   <head>
@@ -10,43 +13,77 @@
   <body>
     <?php include 'editHeader.html'; ?>
     <script>
-    var oldText;
-    function areaClick(area, type)
-    {
-      switch (type) {
-        case 'description':
-          oldText = area.value;
-          break;
-        default: break;
+      function check(){
+        var file = document.querySelector("#fUpload");
+        if ( /\.(jpe?g|png)$/i.test(file.files[0].name) === false ) { alert("Выберите корректный файл!"); }
       }
-    }
-    function leaveArea(area)
-    {
-      if(area.value != oldText)
-      {
-        alert("change");
-        //сохранение
-      }
-    }
     </script>
+    <div>
+      <form method='post' enctype='multipart/form-data'>
+      <?php
+        require 'funcToChange.php';
 
-    <div class="projects-clean">
-      <div class="container">
-        <div class="intro">
-          <h2 class="text-center">Категории товаров</h2>
-          <p class="text-center">Выберите изменяемую категорию</p>
-        </div>
-        <div class="row projects">
-          <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" src="../resources/goods/Conditioning.jpg" />
-            <h3 class="nav-item"><a class="nav-link" href="editConditions.php">Кондиционеры</a></h3>
-              <textarea id="condDescr" style="width:350px;height:100px;" onclick="areaClick(this,'description')" onblur="leaveArea(this)">В наличии имеются полупромышленные и промышленные кондиционеры, а так же бытовые спит-системы</textarea>
-          </div>
-          <div class="col-sm-6 col-lg-4 item"><img class="img-fluid" src="../resources/goods/Ventilation.jpg" />
-            <h3 class="nav-item"><a class="nav-link" href="">Вентиляция</a></h3>
-              <textarea id="ventDescr" style="width:350px;height:100px;" onclick="areaClick(this,'description')" onblur="leaveArea(this)">Вентиляция промышленных и жилых помещений</textarea>
-          </div>
-        </div>
-      </div>
+        $db = new SQLite3('../resources/data.sqlite');
+        $res = $db->query('SELECT * FROM GoodsCategory');
+        echo "<p>Категории товаров</p>";
+        echo "<div>";
+        echo "<table>";
+        echo "<tr><p>Добавить категорию</p></tr>";
+        echo "<tr>";
+        echo "<td width='400'><p>Выберите файл:</p><input id='fUpload' type='file' onchange='check()' name='filename' size='10' /></td>";
+        echo "<td width='150'><textarea id='nameText' name='nameText' placeholder='Наименование'></textarea></td>";
+        echo "<td width='150'><textarea id='descriptionText' name='descriptionText' placeholder='Описание'></textarea></td>";
+        echo "<td width='300'><input type='submit' name='addButton' id='addButton' value='Добавить товар'></button></td>";
+        echo "</tr>";
+        $folder = "../resources/goods/cond/";
+        while ($row = $res->fetchArray()) {
+          $image = $row['nameImg'];
+          $title = $row['title'];
+          $id = $row['id'];
+          $desc = $row['description'];
+          echo "<tr>";
+          echo "<td width='400'><img src='$folder$image' width='350' height='200'></td>";
+          echo "<td width='150'><h5><a href='generator.php?category=$id'>$title</a></h5></td>";
+          echo "<td width='150'><h5>{$desc}</h5></td>";
+          echo "<td width='300'>
+          <input type='submit' name='changeGoods[$id]' value='Изменить'></button>
+          <input type='submit' name='deleteGoods[$id]' value='Удалить'></button>
+          </td>";
+          echo "</tr>";
+        }
+        echo "</table>";
+        echo "</div>";
+
+        if (isset($_POST['addButton']))
+        { 
+          $file = "filename";
+          $nameText = "nameText";
+          $descriptionText = "descriptionText";
+          $table = "GoodsCategory";
+          addNew($folder, $file, $nameText, $descriptionText, $table);
+
+          echo('<meta http-equiv="refresh" content="0">');
+          exit(); 
+        }
+        if (isset($_POST['deleteGoods']))
+        {
+          $table = "GoodsCategory";
+          $id = key($_POST['deleteGoods']);
+          deleteGoods($id, $table);
+          echo('<meta http-equiv="refresh" content="0">');
+          exit();
+        }
+        if (isset($_POST['changeGoods']))
+        {
+          $_SESSION['id'] = key($_POST['changeGoods']);
+          $_SESSION['table'] = "GoodsCategory";
+          $_SESSION['folder'] = $folder;
+          $_SESSION['backPath'] = "../admin/editGoods.php";
+          echo '<script>document.location.href="../admin/editor.php"</script>';
+          exit();
+        }
+      ?>
+    </form>
     </div>
   </body>
 </html>
