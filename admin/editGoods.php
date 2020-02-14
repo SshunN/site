@@ -67,8 +67,10 @@
         }
         if (isset($_POST['deleteGoods']))
         {
-          $table = "GoodsCategory";
           $id = key($_POST['deleteGoods']);
+          $table = "GoodsCategory";
+          $table0 = "Goods";
+          deleteRecord($id, $table0);     
           deleteGoods($id, $table);
           echo('<meta http-equiv="refresh" content="0">');
           exit();

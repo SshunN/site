@@ -43,6 +43,15 @@
         $db = new SQLite3('../resources/data.sqlite');
         $sql = "DELETE FROM '$table' WHERE id = '$id'";
         $db -> query($sql);
+        $db->close();
+      }
+
+      function deleteRecord($categoryID, $table)
+      {
+        $db = new SQLite3('../resources/data.sqlite');
+        $sql = "DELETE FROM '$table' WHERE categoryID = '$categoryID'";
+        $db -> query($sql);
+        $db->close();
       }
 
       function addNew1($folder, $file, $nameText, $descriptionText, $price, $table, $catID)
