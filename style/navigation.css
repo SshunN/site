@@ -16,30 +16,12 @@
   }
 }
 
-.navigation-clean-button .navbar-brand {
-  font-weight:bold;
-  color:inherit;
-}
-
-.navigation-clean-button .navbar-brand:hover {
-  color:#222;
-}
-
-.navigation-clean-button .navbar-toggler {
-  border-color:#ddd;
-}
-
-.navigation-clean-button .navbar-toggler:hover, .navigation-clean-button .navbar-toggler:focus {
-  background:none;
-}
-
-.navigation-clean-button .navbar-toggler {
-  color:#888;
-}
-
-.navigation-clean-button .navbar-collapse, .navigation-clean-button .form-inline {
-  border-top-color:#ddd;
-}
+.navigation-clean-button .navbar-brand {font-weight:bold;color:inherit;}
+.navigation-clean-button .navbar-brand:hover {color:#222;}
+.navigation-clean-button .navbar-toggler {border-color:#ddd;}
+.navigation-clean-button .navbar-toggler:hover, .navigation-clean-button .navbar-toggler:focus {background:none;}
+.navigation-clean-button .navbar-toggler {color:#888;}
+.navigation-clean-button .navbar-collapse, .navigation-clean-button .form-inline {border-top-color:#ddd;}
 
 .navigation-clean-button .navbar-nav a.active, .navigation-clean-button .navbar-nav > .show > a {
   background:none;
@@ -108,13 +90,6 @@
   background:#66d7d7;
 }
 
-element.style {
-}
-
-.dropdown, .dropleft, .dropright, .dropup {
-  position:relative;
-}
-
 .navbar-nav {
   display:-ms-flexbox;
   display:flex;
@@ -145,30 +120,6 @@ element.style {
   border:none;
   margin-bottom:0;
 }
-
-body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  font-size:1rem;
-  font-weight:400;
-  line-height:1.5;
-  color:#212529;
-  text-align:left;
-  background-color:#fff;
-}
-
-html {
-  font-family:sans-serif;
-  line-height:1.15;
-  -webkit-text-size-adjust:100%;
-  -ms-text-size-adjust:100%;
-  -ms-overflow-style:scrollbar;
-  -webkit-tap-highlight-color:transparent;
-}
-
-element.style {
-}
-
 .navigation-clean .dropdown-menu .dropdown-item:focus, .navigation-clean .dropdown-menu .dropdown-item:hover {
   background:#eee;
   color:inherit;
@@ -177,61 +128,4 @@ element.style {
 .navigation-clean .dropdown-menu .dropdown-item:focus, .navigation-clean .dropdown-menu .dropdown-item {
   line-height:2;
   color:#37434d;
-}
-
-.dropdown-item.active, .dropdown-item:active {
-  color:#fff;
-  text-decoration:none;
-  background-color:#007bff;
-}
-
-.dropdown-item:focus, .dropdown-item:hover {
-  color:#16181b;
-  text-decoration:none;
-  background-color:#f8f9fa;
-}
-
-a:hover {
-  color:#0056b3;
-  text-decoration:underline;
-}
-
-.dropdown-item {
-  display:block;
-  width:100%;
-  padding:.25rem 1.5rem;
-  clear:both;
-  font-weight:400;
-  color:#212529;
-  text-align:inherit;
-  white-space:nowrap;
-  background-color:transparent;
-  border:0;
-}
-
-a {
-  color:#007bff;
-  text-decoration:none;
-  background-color:transparent;
-  -webkit-text-decoration-skip:objects;
-}
-
-.dropdown-menu {
-  position:absolute;
-  top:100%;
-  left:0;
-  z-index:1000;
-  display:none;
-  float:left;
-  min-width:10rem;
-  padding:.5rem 0;
-  margin:.125rem 0 0;
-  font-size:1rem;
-  color:#212529;
-  text-align:left;
-  list-style:none;
-  background-color:#fff;
-  background-clip:padding-box;
-  border:1px solid rgba(0,0,0,.15);
-  border-radius:.25rem;
 }

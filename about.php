@@ -18,7 +18,7 @@
         while (!feof($fp))
         {
           $mytext = fgets($fp, 999);
-          echo "<h5>$mytext</h5>";
+          echo "<h5 style='margin:20px;'>$mytext</h5>";
         }
       }
       fclose($fp);

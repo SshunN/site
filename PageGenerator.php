@@ -1,46 +1,60 @@
-<!DOCTYPE html>
-<html lang="ru" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Товары</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/bootstrap.min.css"/>
-    <link rel="stylesheet" href="style/navigation.css">
-  </head>
-  <body>
-    <table>
-      <tbody>
-        <?php 
-          include 'mainHeader.php';
-          $catID = $_GET['category'];
-          $db = new SQLite3('resources/data.sqlite');
-          $res = $db->query("SELECT * FROM Goods WHERE categoryID = $catID");
-          while ($row = $res->fetchArray()) {
-            echo "<tr>";
-            $i = $row['nameImg'];
-            $id = $row['id'];
-            $title = $row['title'];
-            echo "<td width='400'><img src='resources/goods/cond/$i' width='350' height='200'></td>";
-            echo "<td width='150'><h5>{$title}</h5></td>";
-            echo "<td width='150'><h5>{$row['description']}</h5></td>";
+<?php
+  $title = "default";
+  $styles = array();
+  $header = "";
+  $scripts = "";
 
-            echo "<td width='300'>
-            <input type='hidden' id='$id' value=$id>
-            <input type='number' id='count$id' onchange='checkValue(id)' min='1' max='20' value = '1'>
-            <button id='but$id' onclick='addToCart($id, `$title`, $catID)'>Добавить в корзину</button>
-            </td>";
-            echo "</tr>";
-          }
-        ?>
-      </table>
-    </tbody>
-    <script>
-    changePage("goodH");
-    function checkValue(id){
-      el = document.getElementById(id);
-      if(el.value > 20) el.value = 20;
-      if(el.value < 1) el.value = 1;
+  function setHeadInfo($_title) { global $title; $title = $_title; }
+  function addStyle($_style) { global $styles; array_push($styles, $_style); }
+  function addStylesArray($_styles) { global $styles; $styles = array_merge((array)$styles, (array)$_styles); }
+  function addScript($script)
+  {
+    global $scripts;
+    $scripts = $scripts . $script;
+  }
+  class HeaderItem {
+    private $id;
+    private $link;
+    private $text;
+    private $script;
+    function __construct($id, $link, $text, $script = "") 
+    {
+       $this->id = $id; 
+       $this->link = $link; 
+       $this->text = $text; 
+       $this->script = $script;
     }
-    </script>
-    </body>
-</html>
+    function getID() { return $this->id; }
+    function getLink() { return $this->link; }
+    function getText() { return $this->text; }
+    function getScript() { return $this->script; }
+  }
+  function setHeader(array $items)
+  {
+    global $header;
+    $header = "
+    <div><nav class='navbar navbar-light navbar-expand-md navigation-clean-button'><div class='container'>
+    <div class='collapse navbar-collapse' id='navcol-1'><ul class='nav navbar-nav mr-auto'>";
+    for($i = 0; $i < count($items); $i++)
+    {
+      $h = $items[$i];
+      $header = $header . "<li class='nav-item' role='presentation'>
+      <a id='" . $h->getID() . "' class='nav-link' href='" . $h->getLink() . "' onclick='" . $h->getScript() . "'>"
+       . $h->getText() . "</a></li>";
+    }
+    $header = $header . "</ul></div></div></nav></div>";
+  }
+
+  function inicializePage()
+  {
+    global $title, $styles, $scripts, $header;
+    echo "<!DOCTYPE html><html lang='ru' dir='ltr'><head><meta charset='utf-8'>";
+    echo "<title>$title</title>";
+    for ($i = 0; $i < count($styles); $i++){$s = $styles[$i];echo "<link rel='stylesheet' href=$s>"; }
+    echo "</head>";
+    echo "<body>";
+    echo "<script>" . $scripts . "</script>";
+    echo $header;
+    echo "</body>";
+  }
+ ?>

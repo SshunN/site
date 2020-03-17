@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Товары</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/bootstrap.min.css"/>
     <link rel="stylesheet" href="style/navigation.css">
     <style>
@@ -13,33 +14,39 @@
     .article-list .item .description { font-size:14px; margin-top:15px; margin-bottom:0; }
     .img-fluid { max-width:300px; max-height:300px; }
     img { vertical-align:middle; border-style:none; }
-    footer {background-color:#292c2f;box-sizing:border-box;width:100%;text-align:left;font:bold 16px sans-serif;padding:30px;bottom:0;color:#fff;}
-    .footer-navigation p.company-name {color:#8f9296;font-size:14px;font-weight:normal;margin-top:20px;}
-    .footer-navigation h3 a {text-decoration:none;color:#fff;}
-    .footer-navigation h3 {margin:0;font:normal 36px Cookie, cursive;margin-bottom:20px;color:#fff;}
     </style>
   </head>
   <body>
-   <?php 
+    <?php 
       include 'mainHeader.php';
+      $catID = $_GET['category'];
       $db = new SQLite3('resources/data.sqlite');
-      $res = $db->query('SELECT * FROM GoodsCategory');
+      $res = $db->query("SELECT * FROM Goods WHERE categoryID = $catID");
       echo "<div class='article-list'><div class='container'><div class='row articles'>";
       while ($row = $res->fetchArray()) {
-        $image = $row['nameImg'];
-        $title = $row['title'];
+        $i = $row['nameImg'];
         $id = $row['id'];
+        $title = $row['title'];
         $desc = $row['description'];
         echo "<div class='col-sm-6 col-md-4 item'>
-        <img class='img-fluid' src='resources/goods/cond/$image' />
-        <a href='GoodsPageGenerator.php?category=$id'><h3 class='name'>$title</h3></a>
-        <p class='description'>$desc</p></div>";
+        <img class='img-fluid' src='resources/goods/cond/$i' />
+        <h3 class='name'>$title</h3>
+        <p class='description'>$desc</p>
+        <input type='hidden' id='$id' value=$id>
+        <input type='number' id='count$id' onchange='checkValue($id)' min='0' max='20' value = '0'>
+        <button hidden='true' id='but$id' onclick='addToCart($id, `$title`, $catID)'>Добавить в корзину</button>
+        </div>";
       }
       echo "</div></div></div>";
     ?>
-    </tr>
-    <script>changePage("goodH");</script>
-    <?php include 'Footer.html'; ?>
+    <script>
+    changePage("goodH");
+    function checkValue(id){  
+      var el = document.getElementById("count" + id);
+      var but = document.getElementById('but' + id);
+      if(el.value <= 0) { el.value = 0; but.hidden = true; }
+      else { but.hidden = false; if(el.value > 20) el.value = 20; }
+    }
+    </script>
     </body>
 </html>
-
