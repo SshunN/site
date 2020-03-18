@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="style/navigation.css">
   </head>
   <body>
-    <?php include 'mainHeader.php';?>
+    <?php 
+    include_once 'mainHeader.php';
+    drawHeader("aboutH");
+    ?>
     <script>changePage("aboutH");</script>
     <div>
       <?php

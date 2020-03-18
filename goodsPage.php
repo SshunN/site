@@ -21,24 +21,23 @@
   </head>
   <body>
    <?php 
-      include 'mainHeader.php';
-      $db = new SQLite3('resources/data.sqlite');
-      $res = $db->query('SELECT * FROM GoodsCategory');
+      include_once "mainHeader.php";
+      drawHeader("goodH");
+      include_once "DBManager.php";
+      $array = select("GoodsCategory", array("nameImg", "title", "id", "description"));
       echo "<div class='article-list'><div class='container'><div class='row articles'>";
-      while ($row = $res->fetchArray()) {
-        $image = $row['nameImg'];
-        $title = $row['title'];
-        $id = $row['id'];
-        $desc = $row['description'];
+      for($i = 0; $i < count($array); $i++)
+      {
+        $r = $array[$i];
         echo "<div class='col-sm-6 col-md-4 item'>
-        <img class='img-fluid' src='resources/goods/cond/$image' />
-        <a href='GoodsPageGenerator.php?category=$id'><h3 class='name'>$title</h3></a>
-        <p class='description'>$desc</p></div>";
+        <img class='img-fluid' src='resources/goods/cond/" . $r->getFieldByName("nameImg") . "' />
+        <a href='GoodsPageGenerator.php?category=" . $r->getFieldByName("id") . "'><h3 class='name'>" . 
+        $r->getFieldByName("title") . "</h3></a>
+        <p class='description'>" . $r->getFieldByName("description") . "</p></div>";
       }
       echo "</div></div></div>";
     ?>
     </tr>
-    <script>changePage("goodH");</script>
     <?php include 'Footer.html'; ?>
     </body>
 </html>

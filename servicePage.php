@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Услуги</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/bootstrap.min.css"/>
-    <link rel="stylesheet" href="style/navigation.css">
-  </head>
   <body>
-    <?php include 'mainHeader.php';?>
-    <script>changePage("serviceH");</script>
+    <?php 
+      include_once 'mainHeader.php';
+      setHeadInfo("Услуги");
+      addStylesArray(array("style/bootstrap.min.css", "style/navigation.css"));
+      inicializeHead();
+      drawHeader("serviceH");
+    ?>
     <div>
         <div class="container" id="Cont0">
             <div class="row">

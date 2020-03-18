@@ -18,7 +18,8 @@
   </head>
   <body>
     <?php 
-      include 'mainHeader.php';
+      include_once 'mainHeader.php';
+      drawHeader("goodH");
       $catID = $_GET['category'];
       $db = new SQLite3('resources/data.sqlite');
       $res = $db->query("SELECT * FROM Goods WHERE categoryID = $catID");
