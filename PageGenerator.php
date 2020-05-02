@@ -29,9 +29,8 @@
     $header = "
     <div><nav class='navbar navbar-light navbar-expand-md navigation-clean-button'><div class='container'>
     <div class='collapse navbar-collapse' id='navcol-1'><ul class='nav navbar-nav mr-auto'>";
-    for($i = 0; $i < count($items); $i++)
+    foreach($items as $h)
     {
-      $h = $items[$i];
       $clas;
       if($h->getID() == $currentPage) $clas = "navbar-brand";
       else $clas = "nav-link";

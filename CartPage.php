@@ -13,31 +13,29 @@
   <body>
     <?php
     include_once 'mainHeader.php';
-    function a()
+    drawHeader("cartH");
+
+    $arr = json_decode($_COOKIE["cart"],true);
+    echo "<table>";
+    foreach($arr as $a)
     {
-      $arr = json_decode($_COOKIE["cart"],true);
-      echo "<table>";
-      foreach($arr as $a)
-      {
-        $id = $a['id'];
-        echo "<tr>";
-        $s = $a['name'];
-        echo "<td>$s</td>";
-        $s = $a['count'];
-        echo "<td><input type='number' id='count$id' onchange='changeCount($id)' value='$s' min='0' max='20'/></td>";
-        echo "<td><button onclick='removeGood($id)'>Удалить</button></td>";
-        echo "</tr>";
-      }
-      echo "<tr><td><h7>Почта</h7></td>";
-      echo "<td><input id='mailArea' type='text'/></td></tr>";
-      echo "<tr><td><h7>Телефон</h7></td>";
-      echo "<td><input id='telArea' type='text' value='' onkeyup='checkTelephone()'/></td></tr>";
-      echo "<tr><td><button onclick='sendQuery()'>Отправить заказ</button></td></tr>";
+      $id = $a['id'];
+      echo "<tr>";
+      $s = $a['title'];
+      echo "<td>$s</td>";
+      $s = $a['count'];
+      echo "<td><input type='number' id='count$id' onchange='changeCount($id)' value='$s' min='0' max='20'/></td>";
+      echo "<td><button onclick='removeGood($id)'>Удалить</button></td>";
+      echo "</tr>";
     }
-    a();
+    echo "<tr><td><h7>Почта</h7></td>";
+    echo "<td><input id='mailArea' type='text'/></td></tr>";
+    echo "<tr><td><h7>Телефон</h7></td>";
+    echo "<td><input id='telArea' type='text' value='' onkeyup='checkTelephone()'/></td></tr>";
+    echo "<tr><td><button onclick='sendQuery()'>Отправить заказ</button></td></tr>";
      ?>
      <script>
-     changePage("cartH");
+     setCookie("cart", "", {'max-age': -1 });
      function changeCount(id){
        cart[id].count=document.getElementById("count" + id).value;
        s = JSON.stringify(cart);

@@ -21,17 +21,18 @@
                   <p class="text-center">Мы предоставляем ряд услуг, представленные на данной странице.</p>
               </div>
               <?php
-                $db = new SQLite3('resources/data.sqlite');
-                $res = $db->query("SELECT * FROM Services");
-                echo "<div class='row projects'><div class='col-sm-6 item'>";
-                while ($row = $res->fetchArray()) {
-                    $name = $row['title'];
-                    $desc = $row['description'];
-                    echo "<div class='row'><div class='col'>";
-                    echo "<h3 class='name'>$name</h3>";
-                    echo "<p class='description'>$desc</p></div></div>";
-                }
-                echo "</div></div>"
+              include_once "DBManager.php";
+              $res = select("Services", array("title", "description"));
+              echo "<div class='row projects'><div class='col-sm-6 item'>";
+              foreach($res as $r)
+              {
+                $name = $r->getFieldByName('title');
+                $desc = $r->getFieldByName('description');
+                echo "<div class='row'><div class='col'>";
+                echo "<h3 class='name'>$name</h3>";
+                echo "<p class='description'>$desc</p></div></div>";
+              }
+              echo "</div></div>"
               ?>
           </div>
       </div>

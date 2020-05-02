@@ -19,29 +19,31 @@
   <body>
     <?php 
       include_once 'mainHeader.php';
+      include_once 'DBManager.php';
       drawHeader("goodH");
       $catID = $_GET['category'];
-      $db = new SQLite3('resources/data.sqlite');
-      $res = $db->query("SELECT * FROM Goods WHERE categoryID = $catID");
+      $res = select("Goods", array("nameImg", "id", "title", "description"), "categoryID = $catID");
       echo "<div class='article-list'><div class='container'><div class='row articles'>";
-      while ($row = $res->fetchArray()) {
-        $i = $row['nameImg'];
-        $id = $row['id'];
-        $title = $row['title'];
-        $desc = $row['description'];
+      foreach($res as $r)
+      {
+        $i = $r->getFieldByName('nameImg');
+        $id = $r->getFieldByName('id');
+        $title = $r->getFieldByName('title');
+        $desc = $r->getFieldByName('description');
         echo "<div class='col-sm-6 col-md-4 item'>
         <img class='img-fluid' src='resources/goods/cond/$i' />
         <h3 class='name'>$title</h3>
         <p class='description'>$desc</p>
         <input type='hidden' id='$id' value=$id>
         <input type='number' id='count$id' onchange='checkValue($id)' min='0' max='20' value = '0'>
-        <button hidden='true' id='but$id' onclick='addToCart($id, `$title`, $catID)'>Добавить в корзину</button>
+        <button hidden='true' id='but$id' onclick='addToCart($id, `$title`, $catID, getGoodCount($id))'>Добавить в корзину</button>
         </div>";
       }
       echo "</div></div></div>";
     ?>
     <script>
     changePage("goodH");
+    function getGoodCount(id) { return document.getElementById('count' + id).value; }
     function checkValue(id){  
       var el = document.getElementById("count" + id);
       var but = document.getElementById('but' + id);
